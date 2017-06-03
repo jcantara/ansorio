@@ -1,5 +1,5 @@
 ---
-- name: Create AWS environment and instance
+- name: Configure existing Factorio instance
   hosts: localhost
   connection: local
   gather_facts: False

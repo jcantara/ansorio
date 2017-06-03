@@ -1,0 +1,19 @@
+---
+- name: Terminate factorio instance
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    region: us-east-1
+    zone: us-east-1a
+#    local_ip: 
+  tasks:
+    - name: Terminate factorio instance
+      ec2:
+        region: "{{ region }}"
+        exact_count: 0
+        count_tag:
+          Name: Factorio
+        image: ami-a025aeb6
+      register: ec2
+
