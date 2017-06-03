@@ -1,0 +1,10 @@
+---
+- name: Create factorio group
+  group:
+    name: factorio
+
+- name: Create factorio user
+  user:
+    name: factorio
+    shell: /sbin/nologin
+    group: factorio

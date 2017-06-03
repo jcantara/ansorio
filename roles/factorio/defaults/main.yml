@@ -1,0 +1,84 @@
+---
+
+game_save_name: ansorio
+factorio_home_dir: /home/factorio
+factorio_working_dir: "{{ factorio_home_dir }}/factorio"
+game_save_path: "{{ factorio_home_dir }}/{{ game_save_name }}.zip"
+factorio_binary: "{{ factorio_working_dir }}/bin/x64/factorio"
+
+# server-settings
+public_game_name: Ansorio
+public_game_description: Ansorio
+public_game_tags:
+  - ansorio
+  - factorio
+
+max_players: 0
+
+publicly_visible: false
+lan_visible: true
+
+# factorio.com username/password(or token) for use if publicly_visible:true
+factorio_com_username: ""
+factorio_com_password: ""
+factorio_com_token: ""
+
+game_password: ""
+
+require_user_verification: true
+
+max_upload_in_kilobytes_per_second: 0
+minimum_latency_in_ticks: 0
+ignore_player_limit_for_returning_players: false
+allow_commands: admins-only # true, false and admins-only
+
+autosave_interval: 10
+autosave_slots: 5
+
+afk_autokick_interval: 0
+auto_pause: true
+only_admins_can_pause_the_game: true
+autosave_only_on_server: true
+
+admins: []
+#  - Bill
+#  - Bob
+
+# map-gen-settings
+# none, very-low, low, normal, high, very-high
+terrain_segmentation: normal
+water: normal
+width: 0
+height: 0
+starting_area: normal
+peaceful_mode: false
+coal:
+  frequency: normal
+  size: normal
+  richness: normal
+copper:
+  frequency: normal
+  size: normal
+  richness: normal
+oil:
+  frequency: normal
+  size: normal
+  richness: normal
+enemy_base:
+  frequency: normal
+  size: normal
+  richness: normal
+iron:
+  frequency: normal
+  size: normal
+  richness: normal
+stone:
+  frequency: normal
+  size: normal
+  richness: normal
+uranium:
+  frequency: normal
+  size: normal
+  richness: normal
+
+seed: "null"

@@ -1,0 +1,46 @@
+---
+- name: Configure server-settings
+  template:
+    src: server-settings.json.j2
+    dest: "{{ factorio_working_dir }}/data/server-settings.json"
+    owner: factorio
+    group: factorio
+    mode: 0644
+  notify:
+    - restart factorio
+
+- name: Configure map-gen-settings
+  template:
+    src: map-gen-settings.json.j2
+    dest: "{{ factorio_working_dir }}/data/map-gen-settings.json"
+    owner: factorio
+    group: factorio
+    mode: 0644
+
+- name: Create upstart
+  template:
+    src: factorio-upstart.conf.j2
+    dest: /etc/init/factorio.conf
+  notify:
+    - restart factorio
+
+- name: Create systemd
+  template:
+    src: factorio-systemd.service.j2
+    dest: /etc/systemd/system/factorio.service
+  notify:
+    - restart factorio
+
+- name: Check if game save exists
+  stat:
+    path: "{{ game_save_path }}"
+  register: game_save_stat
+
+- name: Create initial game save
+  command: "{{ factorio_binary }} --create {{ game_save_path }} --map-gen-settings {{ factorio_working_dir}}/data/map-gen-settings.json"
+  become: yes
+  become_user: factorio
+  when: game_save_stat.stat.exists != true
+  notify:
+    - restart factorio
+

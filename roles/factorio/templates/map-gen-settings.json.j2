@@ -1,0 +1,23 @@
+{
+  "_comment": "Sizes can be specified as none, very-low, low, normal, high, very-high",
+
+  "terrain_segmentation": "{{ terrain_segmentation }}",
+  "water": "{{ water }}",
+  "width": {{ width }},
+  "height": {{ height }},
+  "starting_area": "{{ starting_area }}",
+  "peaceful_mode": {{ peaceful_mode | ternary('true', 'false') }},
+  "autoplace_controls":
+  {
+    "coal": {"frequency": "{{ coal.frequency }}", "size": "{{ coal.size }}", "richness": "{{ coal.richness }}"},
+    "copper-ore": {"frequency": "{{ copper.frequency }}", "size": "{{ copper.size }}", "richness": "{{ copper.richness }}"},
+    "crude-oil": {"frequency": "{{ oil.frequency }}", "size": "{{ oil.size }}", "richness": "{{ oil.richness }}"},
+    "enemy-base": {"frequency": "{{ enemy_base.frequency }}", "size": "{{ enemy_base.size }}", "richness": "{{ enemy_base.richness }}"},
+    "iron-ore": {"frequency": "{{ iron.frequency }}", "size": "{{ iron.size }}", "richness": "{{ iron.richness }}"},
+    "stone": {"frequency": "{{ stone.frequency }}", "size": "{{ stone.size }}", "richness": "{{ stone.richness }}"},
+    "uranium-ore": {"frequency": "{{ uranium.frequency }}", "size": "{{ uranium.size }}", "richness": "{{ uranium.richness }}"}
+  },
+
+  "_comment_seed": "Use null for a random seed, number for a specific seed.",
+  "seed": {{ seed }}
+}

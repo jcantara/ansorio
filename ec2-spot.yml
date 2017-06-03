@@ -1,0 +1,137 @@
+---
+- name: Create AWS environment and instance
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    region: us-east-1
+    zone: us-east-1a
+#    local_ip:
+  tasks:
+    - name: Create EC2 keypair from local ssh key
+      ec2_key:
+        name: factorio
+        key_material: "{{ item }}"
+        region: "{{ region }}"
+      with_file: ~/.ssh/id_rsa.pub
+
+    - name: Create AWS VPC
+      ec2_vpc_net:
+        name: Factorio
+        state: present
+        region: "{{ region }}"
+        cidr_block: 10.10.220.0/24
+        tags:
+          Environment: Factorio
+      register: factorio_vpc
+
+    - name: Show factorio_vpc object
+      debug:
+        msg: "{{ factorio_vpc }}"
+
+    - name: Create AWS VPC Subnet
+      ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ factorio_vpc.vpc.id }}"
+        region: "{{ region }}"
+        az: "{{ zone }}"
+        cidr: 10.10.220.0/24
+        resource_tags:
+          Environment: Factorio
+      register: factorio_subnet
+
+    - name: Show factorio_subnet object
+      debug:
+        msg: "{{ factorio_subnet }}"
+
+    - name: Create AWS VPC Gateway
+      ec2_vpc_igw:
+        vpc_id: "{{ factorio_vpc.vpc.id }}"
+        state: present
+        region: "{{ region }}"
+      register: factorio_gateway
+
+    - name: Show factorio_gateway object
+      debug:
+        msg: "{{ factorio_gateway }}"
+
+    - name: Create AWS VPC Route Table
+      ec2_vpc_route_table:
+        vpc_id: "{{ factorio_vpc.vpc.id }}"
+        region: "{{ region }}"
+        subnets:
+          - "{{ factorio_subnet.subnet.id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ factorio_gateway.gateway_id }}"
+
+    - name: Create security group
+      ec2_group:
+        name: factorio
+        description: factorio
+        vpc_id: "{{ factorio_vpc.vpc.id }}"
+        region: "{{ region }}"
+        rules:
+          - proto: udp
+            from_port: 34197
+            to_port: 34197
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: "{{ local_ip }}/32"
+      register: factorio_group
+
+    - name: Show factorio_group object
+      debug:
+        msg: "{{ factorio_group }}"
+
+    - name: Request spot instance
+      ec2:
+        spot_price: 0.025
+        spot_wait_timeout: 600
+        keypair: factorio
+        instance_type: c4.large # C4 has good CPU performance, memory, network
+        image: ami-a025aeb6 # Ubuntu 17.04 64-bit HVM
+        wait: yes
+        vpc_subnet_id: "{{ factorio_subnet.subnet.id }}"
+        assign_public_ip: yes
+        region: "{{ region }}"
+        exact_count: 1
+        zone: "{{ zone }}"
+        group: factorio
+        count_tag:
+          Name: Factorio
+        instance_tags:
+          Name: Factorio
+        user_data: |
+          #!/bin/bash
+          apt-get update
+          apt-get install -y python-minimal
+      register: ec2
+
+    - name: Show ec2 object
+      debug:
+        msg: "{{ ec2 }}"
+
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+      with_items: "{{ ec2.tagged_instances }}"
+
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ item.public_dns_name }}"
+        port: 22
+        delay: 10
+        timeout: 320
+        state: started
+      with_items: "{{ ec2.tagged_instances }}"
+
+- name: Configure factorio instance(s)
+  hosts: all
+  become: True
+  gather_facts: True
+  remote_user: ubuntu
+  roles:
+    - factorio

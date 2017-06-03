@@ -1,0 +1,6 @@
+---
+- name: restart factorio
+  service:
+    name: factorio
+    state: restarted
+           

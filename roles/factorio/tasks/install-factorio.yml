@@ -1,0 +1,30 @@
+---
+
+- name: Check if the factorio directory exists
+  stat:
+    path: "{{ factorio_home_dir }}/factorio"
+  register: factorio_directory
+
+- name: Download headless factorio server
+  get_url:
+    url: https://www.factorio.com/get-download/0.15.18/headless/linux64
+    dest: "{{ factorio_home_dir }}"
+  when: factorio_directory.stat.exists != True
+  register: factorio_download
+
+- name: Unpack factorio archive
+  unarchive:
+    remote_src: yes
+    owner: factorio
+    group: factorio
+    src: "{{ factorio_download.dest }}"
+    dest: "{{ factorio_home_dir }}"
+  when: factorio_directory.stat.exists != true
+
+- name: Change ownership to factorio
+  file:
+    path: "{{ factorio_working_dir }}"
+    state: directory
+    owner: factorio
+    group: factorio
+    recurse: yes
