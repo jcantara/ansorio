@@ -1,0 +1,98 @@
+---
+# These are all of the settings used by the playbooks and ansible role. Everything here can and/or should be configured; though if you just
+# want to get up and running, configure `local_ip` and `factorio_s3_bucket` and run the playbook to get a server going
+
+# Public IP address of the machine you are running the playbook from, IE https://www.google.com/search?q=what+is+my+ip
+local_ip: 
+
+# Name of AWS S3 bucket to store the factorio savegames in; this will be created if it does not yet exist
+factorio_s3_bucket: 
+
+# Name for the savegame to keep things separate if you have multiple games
+game_save_name: ansorio
+
+# Settings for searchable public games, name, description and any tags
+public_game_name: Ansorio
+public_game_description: Ansorio
+public_game_tags:
+  - ansorio
+  - factorio
+
+# 0 is no max
+max_players: 0
+
+# visibility, publicly_visible means it will show on the browse public games list, lan_visible is accessible by IP or DNS address only.
+publicly_visible: false
+lan_visible: true
+
+# factorio.com username/password(or token) for use if publicly_visible:true
+factorio_com_username: ""
+factorio_com_password: ""
+factorio_com_token: ""
+
+# Password to join the game used by other people
+game_password: ""
+
+# Ensures clients joining have a valid factorio.com username
+require_user_verification: true
+
+# server settings configuration, 0 value is "none"
+max_upload_in_kilobytes_per_second: 0
+minimum_latency_in_ticks: 0
+ignore_player_limit_for_returning_players: false
+allow_commands: admins-only # this setting can be: true, false or admins-only
+
+# How often to autosave, and how many to keep backups of
+autosave_interval: 10
+autosave_slots: 5
+
+# Game-admin configuration
+afk_autokick_interval: 0
+auto_pause: true
+only_admins_can_pause_the_game: true
+autosave_only_on_server: true
+
+# List of game admins, valid factorio.com usernames
+admins: []
+#  - Bill
+#  - Bob
+
+# Map generation settings, options are:
+# none, very-low, low, normal, high, very-high
+terrain_segmentation: normal
+water: normal
+width: 0
+height: 0
+starting_area: normal
+peaceful_mode: false
+coal:
+  frequency: normal
+  size: normal
+  richness: normal
+copper:
+  frequency: normal
+  size: normal
+  richness: normal
+oil:
+  frequency: normal
+  size: normal
+  richness: normal
+enemy_base:
+  frequency: normal
+  size: normal
+  richness: normal
+iron:
+  frequency: normal
+  size: normal
+  richness: normal
+stone:
+  frequency: normal
+  size: normal
+  richness: normal
+uranium:
+  frequency: normal
+  size: normal
+  richness: normal
+
+# Game generation map seed
+seed: "null"
