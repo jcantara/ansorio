@@ -1,6 +1,17 @@
 ---
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
 - name: restart factorio
   service:
     name: factorio
     state: restarted
+    enabled: yes
+  notify: Reload systemd daemon
            
+- name: restart factorio_sync
+  service:
+    name: factorio-s3-sync
+    state: restarted
+    enabled: yes
+  notify: Reload systemd daemon

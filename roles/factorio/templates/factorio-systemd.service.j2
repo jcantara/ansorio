@@ -4,5 +4,5 @@ Description=Factorio Server
 [Service]
 Type=simple
 User=factorio
-ExecStart={{ factorio_binary }} --server-settings {{ factorio_working_dir }}/data/server-settings.json  --start-server {{ game_save_path }}
+ExecStart={{ factorio_binary }} --server-settings {{ factorio_working_dir }}/data/server-settings.json  --start-server-load-latest
 

@@ -1,0 +1,9 @@
+[Unit]
+Description=Factorio S3 Sync Service
+Wants=factorio.service
+After=factorio.service
+
+[Service]
+Type=simple
+User=factorio
+ExecStart={{ factorio_home_dir }}/s3_sync_watch.sh

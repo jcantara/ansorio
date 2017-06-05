@@ -1,0 +1,8 @@
+#!/bin/bash
+
+(
+  flock -x -w 30 200 || exit 1
+
+  aws s3 sync {{ game_save_path | dirname }} s3://{{ factorio_s3_bucket }}/{{ game_save_name }}
+
+) 200>/tmp/.factorio.s3.sync.exclusivelock

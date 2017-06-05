@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/usr/bin/inotifywait --exclude "[.]*.(bak|tmp).zip" -m -e modify -e moved_to {{ game_save_path | dirname }} | while read line; do {{ factorio_home_dir }}/s3_sync_lock.sh & done

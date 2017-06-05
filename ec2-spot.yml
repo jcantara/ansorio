@@ -6,8 +6,10 @@
   vars:
     region: us-east-1
     zone: us-east-1a
-#    local_ip:
   tasks:
+    - name: Import factorio configuration overrides
+      include_vars: factorio-config.yml
+
     - name: Create EC2 keypair from local ssh key
       ec2_key:
         name: factorio
@@ -86,12 +88,35 @@
       debug:
         msg: "{{ factorio_group }}"
 
+    - name: Create S3 bucket
+      s3_bucket:
+        name: "{{ factorio_s3_bucket }}"
+        region: "{{ region }}"
+
+    - name: Create AWS Factorio IAM role
+      iam:
+        iam_type: role
+        name: factorio
+        state: present
+
+    - name: Show s3 bucket policy
+      debug:
+        msg: " {{ lookup('template', 'factorio_s3_bucket_policy.json.j2', convert_data=False) | string }} "
+
+    - name: Create policy for Factorio IAM role
+      iam_policy:
+        iam_type: role
+        iam_name: factorio
+        policy_json: " {{ lookup('template', 'factorio_s3_bucket_policy.json.j2', convert_data=False) | string }} "
+        state: present
+        policy_name: factorio
+
     - name: Request spot instance
       ec2:
         spot_price: 0.025
         spot_wait_timeout: 600
         keypair: factorio
-        instance_type: c4.large # C4 has good CPU performance, memory, network
+        instance_type: c4.large # C4 has good CPU performance, memory, network; i3 instance type might be better; investigate
         image: ami-a025aeb6 # Ubuntu 17.04 64-bit HVM
         wait: yes
         vpc_subnet_id: "{{ factorio_subnet.subnet.id }}"
@@ -104,10 +129,13 @@
           Name: Factorio
         instance_tags:
           Name: Factorio
+        instance_profile_name: factorio
         user_data: |
           #!/bin/bash
           apt-get update
           apt-get install -y python-minimal
+          apt-get install -y awscli
+          apt-get install -y inotify-tools
       register: ec2
 
     - name: Show ec2 object

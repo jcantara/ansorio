@@ -3,7 +3,7 @@
 game_save_name: ansorio
 factorio_home_dir: /home/factorio
 factorio_working_dir: "{{ factorio_home_dir }}/factorio"
-game_save_path: "{{ factorio_home_dir }}/{{ game_save_name }}.zip"
+game_save_path: "{{ factorio_working_dir }}/saves/{{ game_save_name }}.zip"
 factorio_binary: "{{ factorio_working_dir }}/bin/x64/factorio"
 
 # server-settings

@@ -17,30 +17,63 @@
     group: factorio
     mode: 0644
 
-- name: Create upstart
-  template:
-    src: factorio-upstart.conf.j2
-    dest: /etc/init/factorio.conf
-  notify:
-    - restart factorio
-
-- name: Create systemd
+- name: Create systemd for factorio service
   template:
     src: factorio-systemd.service.j2
     dest: /etc/systemd/system/factorio.service
   notify:
     - restart factorio
 
+- name: Create sync lock script
+  template:
+    src: s3_sync_lock.sh.j2
+    dest: "{{ factorio_home_dir }}/s3_sync_lock.sh"
+    owner: factorio
+    group: factorio
+    mode: 0755
+
+- name: Create sync watch script
+  template:
+    src: s3_sync_watch.sh.j2
+    dest: "{{ factorio_home_dir }}/s3_sync_watch.sh"
+    owner: factorio
+    group: factorio
+    mode: 0755
+
+- name: Create systemd for sync service
+  template:
+    src: factorio-s3-sync-systemd.service.j2
+    dest: /etc/systemd/system/factorio-s3-sync.service
+  notify:
+    - restart factorio_sync
+
 - name: Check if game save exists
   stat:
     path: "{{ game_save_path }}"
   register: game_save_stat
 
-- name: Create initial game save
+- name: Create game save directory
+  file:
+    path: "{{ game_save_path | dirname }}"
+    state: directory
+    owner: factorio
+    group: factorio
+    mode: 0755
+  when: game_save_stat.stat.exists != true
+
+- name: Copy game saves from S3 if they don't exist
+  command: "aws s3 sync s3://{{ factorio_s3_bucket }}/{{ game_save_name }}/ {{ game_save_path | dirname }}"
+
+- name: Check if any game saves were synced from S3
+  stat:
+    path: "{{ game_save_path }}"
+  register: s3_game_save_stat
+
+- name: Create initial game save if there is no local or S3 save available
   command: "{{ factorio_binary }} --create {{ game_save_path }} --map-gen-settings {{ factorio_working_dir}}/data/map-gen-settings.json"
   become: yes
   become_user: factorio
-  when: game_save_stat.stat.exists != true
+  when: game_save_stat.stat.exists != true and s3_game_save_stat.stat.exists != true
   notify:
     - restart factorio
 
