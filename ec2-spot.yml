@@ -160,3 +160,9 @@
   remote_user: ubuntu
   roles:
     - factorio
+
+- name: Print IP addresses of configured ec2 instances
+  hosts: localhost
+  connection: local
+  tasks:
+      - debug: var=ansible_all_ipv4_addresses

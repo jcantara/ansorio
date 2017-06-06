@@ -3,11 +3,10 @@
   hosts: localhost
   connection: local
   gather_facts: False
-  vars:
-    region: us-east-1
-    zone: us-east-1a
-#    local_ip: 
   tasks:
+    - name: Import factorio configuration overrides
+      include_vars: factorio-config.yml
+
     - name: Find instance
       ec2:
         region: "{{ region }}"
