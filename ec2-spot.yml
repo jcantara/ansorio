@@ -58,6 +58,8 @@
       ec2_vpc_route_table:
         vpc_id: "{{ factorio_vpc.vpc.id }}"
         region: "{{ region }}"
+        tags:
+          Name: factorio
         subnets:
           - "{{ factorio_subnet.subnet.id }}"
         routes:
@@ -158,11 +160,12 @@
   become: True
   gather_facts: True
   remote_user: ubuntu
+  pre_tasks:
+    - name: Import factorio configuration overrides
+      include_vars: factorio-config.yml
   roles:
     - factorio
-
-- name: Print IP addresses of configured ec2 instances
-  hosts: localhost
-  connection: local
-  tasks:
-      - debug: var=ansible_all_ipv4_addresses
+  post_tasks:
+    - name: Print IP address(es) of configured instance(s)
+      debug:
+        msg: "^^ look above for IP"
