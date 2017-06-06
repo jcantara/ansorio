@@ -2,7 +2,7 @@
 Factorio ansible playbook and role for AWS-centric headless server setup
 
 # Current status
-This ansible playbook will successfully create a running Factorio server on an AWS EC2 spot instance. Savegames are not persisted to durable storage, so if the instance disappears so does the savegame. 
+This ansible playbook will successfully create a running Factorio server on an AWS EC2 spot instance. Savegames are backed up to a specified S3 bucket, and restored if a server is launched fresh with the same game name.
 
 # To use
 1. Install the requirements:
