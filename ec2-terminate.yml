@@ -3,10 +3,6 @@
   hosts: localhost
   connection: local
   gather_facts: False
-  vars:
-    region: us-east-1
-    zone: us-east-1a
-#    local_ip: 
   tasks:
     - name: Terminate factorio instance
       ec2:

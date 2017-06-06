@@ -2,6 +2,12 @@
 # These are all of the settings used by the playbooks and ansible role. Everything here can and/or should be configured; though if you just
 # want to get up and running, configure `local_ip` and `factorio_s3_bucket` and run the playbook to get a server going
 
+# AWS settings
+region: us-east-1
+zone: us-east-1a
+instance_type: c4.large # C4 has good CPU performance, memory, network; i3 instance type might be better; investigate
+spot_price: 0.025 # spot bid price; use spot instances because they're a lot cheaper, and we back up to S3; so worst case we lose a few minutes of play
+
 # Public IP address of the machine you are running the playbook from, IE https://www.google.com/search?q=what+is+my+ip
 local_ip: 
 

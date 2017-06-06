@@ -3,9 +3,6 @@
   hosts: localhost
   connection: local
   gather_facts: False
-  vars:
-    region: us-east-1
-    zone: us-east-1a
   tasks:
     - name: Import factorio configuration overrides
       include_vars: factorio-config.yml
@@ -113,10 +110,10 @@
 
     - name: Request spot instance
       ec2:
-        spot_price: 0.025
+        spot_price: "{{ spot_price }}"
         spot_wait_timeout: 600
         keypair: factorio
-        instance_type: c4.large # C4 has good CPU performance, memory, network; i3 instance type might be better; investigate
+        instance_type: "{{ instance_type }}"
         image: ami-a025aeb6 # Ubuntu 17.04 64-bit HVM
         wait: yes
         vpc_subnet_id: "{{ factorio_subnet.subnet.id }}"
