@@ -66,6 +66,16 @@
           - dest: 0.0.0.0/0
             gateway_id: "{{ factorio_gateway.gateway_id }}"
 
+    - name: Register local public IP address
+      ipify_facts:
+        api_url: http://api.ipify.org
+      when: local_ip is undefined
+
+    - name: Set local_ip fact from ipify
+      set_fact:
+        local_ip: "{{ ipify_public_ip }}"
+      when: local_ip is undefined
+
     - name: Create security group
       ec2_group:
         name: factorio

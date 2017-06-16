@@ -8,8 +8,9 @@ zone: us-east-1a
 instance_type: c4.large # C4 has good CPU performance, memory, network; i3 instance type might be better; investigate
 spot_price: 0.025 # spot bid price; use spot instances because they're a lot cheaper, and we back up to S3; so worst case we lose a few minutes of play
 
-# Public IP address of the machine you are running the playbook from, IE https://www.google.com/search?q=what+is+my+ip
-local_ip: 
+# Public IP address of the machine you are running the playbook from, to allow ssh access in the SG
+# NOTE: This will be automatically populated from ipify unless overridden here
+#local_ip:
 
 # Name of AWS S3 bucket to store the factorio savegames in; this will be created if it does not yet exist
 factorio_s3_bucket: 
