@@ -5,6 +5,7 @@ factorio_home_dir: /home/factorio
 factorio_working_dir: "{{ factorio_home_dir }}/factorio"
 game_save_path: "{{ factorio_working_dir }}/saves/{{ game_save_name }}.zip"
 factorio_binary: "{{ factorio_working_dir }}/bin/x64/factorio"
+factorio_version: 0.15.18
 
 # server-settings
 public_game_name: Ansorio

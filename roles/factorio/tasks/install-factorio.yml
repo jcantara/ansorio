@@ -7,7 +7,7 @@
 
 - name: Download headless factorio server
   get_url:
-    url: https://www.factorio.com/get-download/0.15.18/headless/linux64
+    url: https://www.factorio.com/get-download/{{ factorio_version }}/headless/linux64
     dest: "{{ factorio_home_dir }}"
   when: factorio_directory.stat.exists != True
   register: factorio_download

@@ -17,6 +17,10 @@ factorio_s3_bucket:
 # Name for the savegame to keep things separate if you have multiple games
 game_save_name: ansorio
 
+# Factorio version to install. In the format "0.15.18" or "latest". 
+# Caution, if set to "latest" an instance stopping and starting can trigger an unexpected update.
+factorio_version: 0.15.18
+
 # Settings for searchable public games, name, description and any tags
 public_game_name: Ansorio
 public_game_description: Ansorio
