@@ -1,12 +1,23 @@
 # ansorio
-Factorio ansible playbook and role for AWS-centric headless server setup
 
-# Current status
+### What
+ansorio is an ansible playbook and role for AWS-centric headless server setup of factorio server.
+
+### Why
+For me to practice ansible on something useful to me (and others)
+
+### Who
+This ansible role is intended for someone familiar with Ansible, AWS and Factorio, to quickly get an instance up-and-running.
+
+Any and all contributions and PRs are welcome! I would love for this to become a community project.
+
+## Current status
 This ansible playbook will successfully create a running Factorio server on an AWS EC2 spot instance. Savegames are backed up to a specified S3 bucket, and restored if a server is launched fresh with the same game name.
 
-# To use
+## To use
 1. Install the requirements:
   `pip install -r requirements.txt`
+  We recommend using a virtualenv.
 
 1. If you have not already, ensure that you have AWS CLI set up:
   `aws configure`
