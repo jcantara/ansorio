@@ -131,7 +131,7 @@
         spot_wait_timeout: 600
         keypair: factorio
         instance_type: "{{ instance_type }}"
-        image: ami-a025aeb6 # Ubuntu 17.04 64-bit HVM
+        image: ami-84be98e1 #ami-a025aeb6 # Ubuntu 17.04 64-bit HVM
         wait: yes
         vpc_subnet_id: "{{ factorio_subnet.subnet.id }}"
         assign_public_ip: yes

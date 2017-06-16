@@ -15,3 +15,8 @@
     state: restarted
     enabled: yes
   notify: Reload systemd daemon
+
+- name: restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted

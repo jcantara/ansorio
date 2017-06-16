@@ -17,6 +17,13 @@
     group: factorio
     mode: 0644
 
+- name: Install rsyslog factorio conf
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.d/51-factorio.conf
+  notify:
+    - restart rsyslog
+
 - name: Create systemd for factorio service
   template:
     src: factorio-systemd.service.j2
@@ -61,19 +68,34 @@
     mode: 0755
   when: game_save_stat.stat.exists != true
 
-- name: Copy game saves from S3 if they don't exist
-  command: "aws s3 sync s3://{{ factorio_s3_bucket }}/{{ game_save_name }}/ {{ game_save_path | dirname }}"
+- name: Copy game save from local if configured to
+  copy:
+    src: "{{ local_game_save }}"
+    dest: "{{ game_save_path }}"
+    owner: factorio
+    group: factorio
+    mode: 0755
+  when: local_game_save is defined
 
-- name: Check if any game saves were synced from S3
+- name: Check if any game saves were copied to server
   stat:
     path: "{{ game_save_path }}"
-  register: s3_game_save_stat
+  register: game_save_stat
+
+- name: Copy game saves from S3 if save not found
+  command: "aws s3 sync s3://{{ factorio_s3_bucket }}/{{ game_save_name }}/ {{ game_save_path | dirname }}"
+  when: game_save_stat.stat.exists != true
+
+- name: Check if any game saves were copied to server
+  stat:
+    path: "{{ game_save_path }}"
+  register: game_save_stat
 
 - name: Create initial game save if there is no local or S3 save available
   command: "{{ factorio_binary }} --create {{ game_save_path }} --map-gen-settings {{ factorio_working_dir}}/data/map-gen-settings.json"
   become: yes
   become_user: factorio
-  when: game_save_stat.stat.exists != true and s3_game_save_stat.stat.exists != true
+  when: game_save_stat.stat.exists != true
   notify:
     - restart factorio
 
