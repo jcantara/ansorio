@@ -27,6 +27,7 @@
     - name: Show factorio_vpc object
       debug:
         msg: "{{ factorio_vpc }}"
+        verbosity: 2
 
     - name: Create AWS VPC Subnet
       ec2_vpc_subnet:
@@ -42,6 +43,7 @@
     - name: Show factorio_subnet object
       debug:
         msg: "{{ factorio_subnet }}"
+        verbosity: 2
 
     - name: Create AWS VPC Gateway
       ec2_vpc_igw:
@@ -53,6 +55,7 @@
     - name: Show factorio_gateway object
       debug:
         msg: "{{ factorio_gateway }}"
+        verbosity: 2
 
     - name: Create AWS VPC Route Table
       ec2_vpc_route_table:
@@ -96,6 +99,7 @@
     - name: Show factorio_group object
       debug:
         msg: "{{ factorio_group }}"
+        verbosity: 2
 
     - name: Create S3 bucket
       s3_bucket:
@@ -111,6 +115,7 @@
     - name: Show s3 bucket policy
       debug:
         msg: " {{ lookup('template', 'factorio_s3_bucket_policy.json.j2', convert_data=False) | string }} "
+        verbosity: 2
 
     - name: Create policy for Factorio IAM role
       iam_policy:
@@ -150,6 +155,7 @@
     - name: Show ec2 object
       debug:
         msg: "{{ ec2 }}"
+        verbosity: 2
 
     - name: Add new instance to host group
       add_host:
