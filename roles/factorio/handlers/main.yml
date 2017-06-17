@@ -2,6 +2,11 @@
 - name: Reload systemd daemon
   command: systemctl daemon-reload
 
+- name: restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted
+
 - name: restart factorio
   service:
     name: factorio
@@ -15,8 +20,3 @@
     state: restarted
     enabled: yes
   notify: Reload systemd daemon
-
-- name: restart rsyslog
-  service:
-    name: rsyslog
-    state: restarted
