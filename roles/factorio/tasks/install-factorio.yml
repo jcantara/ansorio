@@ -2,8 +2,34 @@
 
 - name: Check if the factorio directory exists
   stat:
-    path: "{{ factorio_home_dir }}/factorio"
+    path: "{{ factorio_working_dir }}"
   register: factorio_directory
+
+- name: Create working directory if it doesn't exist
+  file:
+    path: "{{ factorio_working_dir }}"
+    state: directory
+    owner: factorio
+    group: factorio
+    mode: 0755
+  when: factorio_directory.stat.exists != true
+
+- name: Mount ephemeral device if specified
+  mount:
+    path: "{{ factorio_working_dir }}"
+    src: "{{ ephemeral_device }}"
+    fstype: ext2
+    state: mounted
+  when: ephemeral_device is defined and factorio_directory.stat.exists != true
+
+- name: Ensure our new mount is owned by factorio user
+  file:
+    path: "{{ factorio_working_dir }}"
+    state: directory
+    owner: factorio
+    group: factorio
+    mode: 0755
+  when: factorio_directory.stat.exists != true
 
 - name: Download headless factorio server
   get_url:

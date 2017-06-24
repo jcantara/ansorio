@@ -179,6 +179,12 @@
   pre_tasks:
     - name: Import factorio configuration overrides
       include_vars: factorio-config.yml
+
+    - name: Format ephemeral disks if specified
+      filesystem:
+        fstype: ext2
+        dev: "{{ ephemeral_device }}"
+      when: ephemeral_device is defined
   roles:
     - factorio
   post_tasks:

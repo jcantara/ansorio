@@ -7,6 +7,7 @@ region: us-east-1
 zone: us-east-1a
 instance_type: c4.large # C4 has good CPU performance, memory, network; i3 instance type might be better; investigate
 spot_price: 0.025 # spot bid price; use spot instances because they're a lot cheaper, and we back up to S3; so worst case we lose a few minutes of play
+# ephemeral_device # if you want to mount an ephemeral local disk at the factorio working directory, such as on an i3.large NVME SSD
 
 # Public IP address of the machine you are running the playbook from, to allow ssh access in the SG
 # NOTE: This will be automatically populated from ipify unless overridden here
