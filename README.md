@@ -1,6 +1,10 @@
-# ansorio
+# DEPRECATED ansorio
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 ### What
+DEPRECATED - was a little pet/educational project a few years ago, cleaned this up a little as I deprecate it just in case someone wants to use it still. I removed the EC2 playbooks because of a lack of separation of concerns and there's better ways to get yourself an instance these days. If you want factorio via ansible there seems to be an ansible galaxy role that's several years newer than this is. 
+
 ansorio is an ansible playbook and role for AWS-centric headless server setup of factorio server.
 
 ### Why

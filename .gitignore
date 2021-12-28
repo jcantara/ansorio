@@ -1,4 +1,6 @@
 .env
+/env/*
 *.retry
 factorio-config.yml
 *.swp
+.python-version
